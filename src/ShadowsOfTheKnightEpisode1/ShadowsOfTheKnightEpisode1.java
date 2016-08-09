@@ -11,17 +11,28 @@ public class ShadowsOfTheKnightEpisode1 {
         int X0 = in.nextInt();
         int Y0 = in.nextInt();
 
+        int xMin = 0;
+        int xMax = W;
+        int yMin = 0;
+        int yMax = H;
+
         // game loop
         while (true) {
             String bombDir = in.next(); // the direction of the bombs from batman's current location (U, UR, R, DR, D, DL, L or UL)
 
-            // Write an action using System.out.println()
-            // To debug: System.err.println("Debug messages...");
-            if (bombDir == U)
+            if (bombDir.contains("D")) yMin = Y0;
+            if (bombDir.contains("U")) yMax = Y0;
+            if (bombDir.contains("R")) xMin = X0;
+            if (bombDir.contains("L")) xMax = X0;
 
+            X0 = getPosition(xMin, xMax);
+            Y0 = getPosition(yMin, yMax);
 
-            // the location of the next window Batman should jump to.
-            System.out.println("0 0");
+            System.out.println(X0 + " " + Y0);
         }
+    }
+
+    public static int getPosition(int minPosition, int maxPosition) {
+        return ((maxPosition-minPosition) - (maxPosition-minPosition)%2)/2 + minPosition;
     }
 }
