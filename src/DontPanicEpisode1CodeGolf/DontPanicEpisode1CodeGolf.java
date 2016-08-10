@@ -4,54 +4,50 @@ import java.util.*;
 public class DontPanicEpisode1CodeGolf {
     public static void main(String a[]) {
         Scanner I = new Scanner(System.in);
-        int nbFloors = I.nextInt(); // number of floors
-        int width = I.nextInt(); // width of the area
-        int nbRounds = I.nextInt(); // maximum number of rounds
-        int exitFloor = I.nextInt(); // floor on which the exit is found
-        int exitPos = I.nextInt(); // position of the exit on its floor
-        int nbTotalClones = I.nextInt(); // number of generated clones
-        int nbAdditionalElevators = I.nextInt(); // ignore (always zero)
-        int nbElevators = I.nextInt(); // number of elevators
-        int[] elevators = new int[nbElevators+1];
-        elevators[exitFloor] = exitPos;
-        for (int i = 0; i < nbElevators; i++) {
-            int elevatorFloor = I.nextInt(); // floor on which this elevator is found
-            int elevatorPos = I.nextInt(); // position of the elevator on its floor
-            elevators[elevatorFloor] = elevatorPos;
+        I.nextInt();
+        I.nextInt();
+        I.nextInt();
+        int f = I.nextInt();
+        int p = I.nextInt();
+        I.nextInt();
+        I.nextInt();
+        int n = I.nextInt();
+        int[] e = new int[n+1];
+        e[f] = p;
+        for (int i = 0; i < n; i++) {
+            int F = I.nextInt();
+            int P = I.nextInt();
+            e[F] = P;
         }
-        int targetFloor = 0;
-        int posNearestTarget = 0;
-        // game loop
+        int t = 0;
+        int N = 0;
         while (true) {
-            int cloneFloor = I.nextInt(); // floor of the leading clone
-            int clonePos = I.nextInt(); // position of the leading clone on its floor
-            String direction = I.next(); // direction of the leading clone: LEFT or RIGHT
-            // Write an action using System.out.println()
-            // To debug: System.err.println("Debug messages...");
-
-            if (targetFloor == cloneFloor) {
-                posNearestTarget = elevators[cloneFloor];
-                if (direction.contains("RIGHT")) {
-                    if (clonePos < posNearestTarget) {
+            int F = I.nextInt();
+            int P = I.nextInt();
+            String d = I.next();
+            if (t == F) {
+                N = e[F];
+                if (d.contains("RIGHT")) {
+                    if (P < N) {
                         System.out.println("WAIT");
-                    } else if (clonePos > posNearestTarget) {
+                    } else if (P > N) {
                         System.out.println("BLOCK");
                     } else {
                         System.out.println("WAIT");
-                        targetFloor++;
+                        t++;
                     }
                 } else {
-                    if (clonePos > posNearestTarget) {
+                    if (P > N) {
                         System.out.println("WAIT");
-                    } else if (clonePos < posNearestTarget) {
+                    } else if (P < N) {
                         System.out.println("BLOCK");
                     } else {
                         System.out.println("WAIT");
-                        targetFloor++;
+                        t++;
                     }
                 }
             } else {
-                System.out.println("WAIT"); // action: WAIT or BLOCK
+                System.out.println("WAIT");
             }
         }
     }
