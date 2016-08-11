@@ -21,7 +21,7 @@ public class DontPanicEpisode1 {
             elevators[elevatorFloor] = elevatorPos;
         }
         int targetFloor = 0;
-        int posNearestTarget = 0;
+        int posNearestTarget;
         // game loop
         while (true) {
             int cloneFloor = in.nextInt(); // floor of the leading clone
@@ -32,24 +32,10 @@ public class DontPanicEpisode1 {
 
             if (targetFloor == cloneFloor) {
                 posNearestTarget = elevators[cloneFloor];
-                if (direction.contains("RIGHT")) {
-                    if (clonePos < posNearestTarget) {
-                        System.out.println("WAIT");
-                    } else if (clonePos > posNearestTarget) {
-                        System.out.println("BLOCK");
-                    } else {
-                        System.out.println("WAIT");
-                        targetFloor++;
-                    }
-                } else {
-                    if (clonePos > posNearestTarget) {
-                        System.out.println("WAIT");
-                    } else if (clonePos < posNearestTarget) {
-                        System.out.println("BLOCK");
-                    } else {
-                        System.out.println("WAIT");
-                        targetFloor++;
-                    }
+                if ((direction.equals("RIGHT") && clonePos >= posNearestTarget) || (direction.equals("LEFT") && clonePos <= posNearestTarget)) {
+                    System.out.println("BLOCK");
+                }else {
+                    System.out.println("WAIT");
                 }
             } else {
                 System.out.println("WAIT"); // action: WAIT or BLOCK
