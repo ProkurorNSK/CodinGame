@@ -10,6 +10,7 @@ public class SkynetRevolutionEpisode1 {
         int N = in.nextInt(); // the total number of nodes in the level, including the gateways
         int L = in.nextInt(); // the number of links
         int E = in.nextInt(); // the number of exit gateways
+        System.err.print(N + " " + L + " " + E);
 
         int[][] links = new int[L][2];
         exits = new int[E];
@@ -39,7 +40,7 @@ public class SkynetRevolutionEpisode1 {
             }
             if (flag) {
                 for (int[] line: links) {
-                    if (isExit(line[0]) || isExit(line[1])) {
+                    if (line[0] == SI || line[1] == SI) {
                         System.out.println(line[0] + " " + line[1]);
                         break;
                     }
