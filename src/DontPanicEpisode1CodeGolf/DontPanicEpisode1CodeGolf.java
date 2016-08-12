@@ -1,4 +1,5 @@
 package DontPanicEpisode1CodeGolf;
+
 import java.util.*;
 
 public class DontPanicEpisode1CodeGolf {
@@ -7,48 +8,30 @@ public class DontPanicEpisode1CodeGolf {
         I.nextInt();
         I.nextInt();
         I.nextInt();
-        int f = I.nextInt();
-        int p = I.nextInt();
+        int F = I.nextInt();
+        int P = I.nextInt();
         I.nextInt();
         I.nextInt();
         int n = I.nextInt();
+
         int[] e = new int[n+1];
-        e[f] = p;
+        e[F] = P;
         for (int i = 0; i < n; i++) {
-            int F = I.nextInt();
-            int P = I.nextInt();
-            e[F] = P;
+            int f = I.nextInt();
+            e[f] = I.nextInt();
         }
         int t = 0;
-        int N = 0;
         while (true) {
-            int F = I.nextInt();
-            int P = I.nextInt();
+            int c = I.nextInt();
+            int p = I.nextInt();
             String d = I.next();
-            if (t == F) {
-                N = e[F];
-                if (d.contains("RIGHT")) {
-                    if (P < N) {
-                        System.out.println("WAIT");
-                    } else if (P > N) {
-                        System.out.println("BLOCK");
-                    } else {
-                        System.out.println("WAIT");
-                        t++;
-                    }
-                } else {
-                    if (P > N) {
-                        System.out.println("WAIT");
-                    } else if (P < N) {
-                        System.out.println("BLOCK");
-                    } else {
-                        System.out.println("WAIT");
-                        t++;
-                    }
-                }
-            } else {
+
+            if ((t == c) && ((d.equals("RIGHT") && p > e[c]) || (d.equals("LEFT") && p < e[c]))) {
+                System.out.println("BLOCK");
+            }else {
                 System.out.println("WAIT");
             }
+            if (t == c && p == e[c]) t++;
         }
     }
 }
