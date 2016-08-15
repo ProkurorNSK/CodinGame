@@ -15,13 +15,13 @@ public class HeartOfTheCity {
             preResult = 0;
             for (int j = 0; j < i; j++) {
                 if (gcd(i,j) == 1) {
-//                    result++;
+                    result++;
                     preResult++;
 //                    System.out.println((double)j/i);
                 }
                 count++;
             }
-            result += getResult(i);
+//            result += getResult(i);
             System.out.println(i + ":" + preResult);
         }
 
@@ -44,7 +44,7 @@ public class HeartOfTheCity {
 
         for (int i = 2; i <= n; i++) {
             if (n%i == 0) {
-                System.out.print(i + " ");
+//                System.out.print(i + " ");
                 n = n/i;
             }
         }
