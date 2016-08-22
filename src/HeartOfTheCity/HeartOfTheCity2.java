@@ -4,7 +4,7 @@ public class HeartOfTheCity2 {
 
     public static int count;
     public static void main(String[] args) {
-        FareiSequence(7);
+        FareiSequence(333);
         System.out.println(count);
     }
     public static void FareiSequence(int n)
