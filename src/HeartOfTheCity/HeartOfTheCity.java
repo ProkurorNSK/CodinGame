@@ -1,6 +1,7 @@
 package HeartOfTheCity;
 
 public class HeartOfTheCity {
+    public static int count;
     public static void main(String args[]) {
 //        Scanner in = new Scanner(System.in);
 //        long n = in.nextLong();
@@ -25,4 +26,5 @@ public class HeartOfTheCity {
         if (n > 1) result -= result / n;
         return result;
     }
+
 }
