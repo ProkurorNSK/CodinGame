@@ -17,9 +17,7 @@ public class SmashTheCode {
             for (int i = 0; i < 12; i++) {
                 String row = in.next();
                 char[] charArray = row.toCharArray();
-                for (int j = 0; j < charArray.length; j++) {
-                    myField[i][j] = charArray[j];
-                }
+                System.arraycopy(charArray, 0, myField[i], 0, charArray.length);
             }
             int score2 = in.nextInt();
             for (int i = 0; i < 12; i++) {
@@ -33,14 +31,11 @@ public class SmashTheCode {
         }
     }
     public static void printArray(char[][] field) {
-        for (int i = 0; i < field.length; i++) {
-            for (int j = 0; j < field[i].length; j++) {
-                System.err.println(field[i][j] + " ");
+        for (char[] aField : field) {
+            for (char anAField : aField) {
+                System.err.println(anAField + " ");
             }
             System.err.println("");
         }
-    }
-    public static void findPlace(char[][] field, int color) {
-
     }
 }

@@ -29,7 +29,7 @@ public class EgyptianMultiplication {
             } else {
                 b--; c += " + " + a; result += a;
             }
-            if (b != 0 || c != "") {
+            if (b != 0 || !Objects.equals(c, "")) {
                 System.out.println("= " + a + " * " + b + c);
             }
         } while (b != 0);

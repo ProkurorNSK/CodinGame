@@ -1,6 +1,6 @@
 package PuzzleMedium.WinamaxSponsoredContest;
 
-import java.util.*;
+import java.util.Scanner;
 
 public class WinamaxSponsoredContest {
     public static void main(String args[]) {

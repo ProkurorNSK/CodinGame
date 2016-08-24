@@ -43,10 +43,7 @@ public class FractalCarpet {
 
     public static void copy(char[][] array, int lenght, int l, int m) {
         for(int i=0; i<lenght; i++){
-            for(int j=0; j<lenght; j++){
-//                System.err.println(lenght + " - " + l + " - " + m);
-                array[i+lenght*l][j+lenght*m] = array[i][j];
-            }
+            System.arraycopy(array[i], 0, array[i + lenght * l], lenght * m, lenght);
         }
     }
 }

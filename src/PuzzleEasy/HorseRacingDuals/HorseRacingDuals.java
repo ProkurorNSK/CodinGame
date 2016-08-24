@@ -20,16 +20,16 @@ public class HorseRacingDuals {
 
         Arrays.sort(horses);
 
-        int minDifferince = Integer.MAX_VALUE;
+        int minDifference = Integer.MAX_VALUE;
         for (int i = 0; i < horses.length-1; i++) {
-            if (Math.abs(horses[i] - horses[i+1]) < minDifferince) {
-                minDifferince = Math.abs(horses[i] - horses[i+1]);
+            if (Math.abs(horses[i] - horses[i+1]) < minDifference) {
+                minDifference = Math.abs(horses[i] - horses[i+1]);
             }
         }
 
         // Write an action using System.out.println()
         // To debug: System.err.println("Debug messages...");
 
-        System.out.println(minDifferince);
+        System.out.println(minDifference);
     }
 }

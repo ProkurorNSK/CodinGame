@@ -13,10 +13,10 @@ public class PowerOfThor {
             int remainingTurns = in.nextInt(); // The remaining amount of turns Thor can move. Do not remove this line.
 
             String path = "";
-            if ( initialTY < lightY ) { path += "S"; initialTY++; };
-            if ( initialTY > lightY ) { path += "N"; initialTY--; };
-            if ( initialTX < lightX ) { path += "E"; initialTX++; };
-            if ( initialTX > lightX ) { path += "W"; initialTX--; };
+            if ( initialTY < lightY ) { path += "S"; initialTY++; }
+            if ( initialTY > lightY ) { path += "N"; initialTY--; }
+            if ( initialTX < lightX ) { path += "E"; initialTX++; }
+            if ( initialTX > lightX ) { path += "W"; initialTX--; }
             System.out.println( path );
         }
     }

@@ -31,9 +31,9 @@ public class ASCIIArt {
         }
 
         char[] charArray = T.toUpperCase().toCharArray();
-        int[] indexAray = new int[charArray.length];
+        int[] indexArray = new int[charArray.length];
         for (int i = 0; i < charArray.length; i++) {
-            indexAray[i] = (int) charArray[i] - 65;
+            indexArray[i] = (int) charArray[i] - 65;
         }
 
         String[] result = new String[H];
@@ -41,8 +41,8 @@ public class ASCIIArt {
 
         for (int i = 0; i < H; i++) {
             result[i] = "";
-            for (int j = 0; j < indexAray.length; j++) {
-                ROW[i].getChars(indexAray[j]*L, (indexAray[j] + 1) *L, symbol, 0);
+            for (int anIndexArray : indexArray) {
+                ROW[i].getChars(anIndexArray * L, (anIndexArray + 1) * L, symbol, 0);
                 result[i] = result[i] + new String(symbol);
             }
         }

@@ -121,7 +121,7 @@ class Buster {
     static int countBusters = 0;
     int x;
     int y;
-    int id;
+    final int id;
     int state;
     int value;
     int isHunting;
@@ -176,7 +176,7 @@ class Buster {
     }
 
     void moveBuster(int x, int y, String message) {
-        System.out.println("MOVE " + x + " " + y + message); // MOVE x y | BUST id | RELEAS
+        System.out.println("MOVE " + x + " " + y + message); // MOVE x y | BUST id | RELEASE
         delayStun--;
     }
 
@@ -231,8 +231,8 @@ class Ghost {
     static int countGhosts = 0;
     int x;
     int y;
-    int id;
-    int state;
+    final int id;
+    final int state;
     int value;
     int isVisible;
     int isTarget;
@@ -262,7 +262,7 @@ class Enemy {
     static int countEnemies = 0;
     int x;
     int y;
-    int id;
+    final int id;
     int state;
     int value;
     int isVisible;
