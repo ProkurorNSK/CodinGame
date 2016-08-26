@@ -8,6 +8,7 @@ public class WinamaxSponsoredContest {
 
         ArrayList<Integer> player1 = new ArrayList<>(0);
         ArrayList<Integer> player2 = new ArrayList<>(0);
+        ArrayList<Integer> targetPlayer;
         int numberPlayer1;
         int numberPlayer2;
         int count = 0;
@@ -28,16 +29,24 @@ public class WinamaxSponsoredContest {
             numberPlayer1 = player1.remove(0);
             numberPlayer2 = player2.remove(0);
             if (numberPlayer1 > numberPlayer2) {
-                player1.add(numberPlayer1);
-                player1.add(numberPlayer2);
+                targetPlayer = player1;
+                add(targetPlayer, numberPlayer1, numberPlayer2);
             } else if (numberPlayer2 > numberPlayer1) {
-                player2.add(numberPlayer2);
-                player2.add(numberPlayer1);
+                targetPlayer = player2;
+                add(targetPlayer, numberPlayer1, numberPlayer2);
             } else {
-                numberPlayer1 = player1.get(3);
-                numberPlayer2 = player2.get(3);
-                for (int i = 0; i < 4; i++) {
-
+                if (player1.size() < 4 || player2.size() < 4) {
+                    System.out.println("PAT");
+                    break;
+                } else {
+                    if (player1.get(3) > player2.get(3)) {
+                        targetPlayer = player1;
+                    } else {
+                        targetPlayer = player2;
+                    }
+                    for (int i = 0; i < 4; i++) {
+                        add(targetPlayer, player1.remove(0), player2.remove(0));
+                    }
                 }
             }
             count++;
@@ -50,6 +59,11 @@ public class WinamaxSponsoredContest {
                 break;
             }
         }
+    }
+
+    private static void add(ArrayList<Integer> targetPlayer, int numberPlayer1, int numberPlayer2) {
+        targetPlayer.add(numberPlayer1);
+        targetPlayer.add(numberPlayer2);
     }
 
     private static int convert(String card) {
