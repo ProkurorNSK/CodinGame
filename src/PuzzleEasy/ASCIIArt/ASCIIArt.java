@@ -1,39 +1,34 @@
 package PuzzleEasy.ASCIIArt;
 
+import java.util.Scanner;
+
 public class ASCIIArt {
     public static void main(String args[]) {
-//        Scanner in = new Scanner(System.in);
-//        int L = in.nextInt();
-        int L = 4;
-//        int H = in.nextInt();
-        int H = 5;
-//        in.nextLine();
-
-//        String T = in.nextLine();
-        String T = "@";
+        Scanner in = new Scanner(System.in);
+        int L = in.nextInt();
+        int H = in.nextInt();
+        in.nextLine();
+        String T = in.nextLine();
 
         String[] ROW = new String[H];
-//        for (int i = 0; i < H; i++) {
-//            ROW[i] = in.nextLine();
-//            ROW[i] = "123456";
-//        }
-        ROW[0] = " #  ";
-        ROW[1] = "# # ";
-        ROW[2] = "### ";
-        ROW[3] = "# # ";
-        ROW[4] = "# # ";
-
-        System.err.println(L);
-        System.err.println(H);
-        System.err.println(T);
         for (int i = 0; i < H; i++) {
-            System.err.println(ROW[i]);
+            ROW[i] = in.nextLine();
         }
 
+//        System.err.println(L);
+//        System.err.println(H);
+//        System.err.println(T);
+//        for (int i = 0; i < H; i++) {
+//            System.err.println(ROW[i]);
+//        }
+
         char[] charArray = T.toUpperCase().toCharArray();
-        int[] indexArray = new int[charArray.length];
+        int[] indexAray = new int[charArray.length];
         for (int i = 0; i < charArray.length; i++) {
-            indexArray[i] = (int) charArray[i] - 65;
+            indexAray[i] = ((int) charArray[i] - 65 < 0 || (int) charArray[i] - 65 > 25) ? 26 : (int) charArray[i] - 65;
+        }
+        for (int i = 0; i < indexAray.length; i++) {
+            System.out.println(indexAray[i]);
         }
 
         String[] result = new String[H];
@@ -41,11 +36,12 @@ public class ASCIIArt {
 
         for (int i = 0; i < H; i++) {
             result[i] = "";
-            for (int anIndexArray : indexArray) {
-                ROW[i].getChars(anIndexArray * L, (anIndexArray + 1) * L, symbol, 0);
+            for (int j = 0; j < indexAray.length; j++) {
+                ROW[i].getChars(indexAray[j]*L, (indexAray[j] + 1) *L, symbol, 0);
                 result[i] = result[i] + new String(symbol);
             }
         }
+
 
         // Write an action using System.out.println()
         // To debug: System.err.println("Debug messages...");
