@@ -6,26 +6,22 @@ public class NetworkCabling {
     public static void main(String args[]) {
         Scanner in = new Scanner(System.in);
         int N = in.nextInt();
-        int[] y = new int[N];
-        int minX = Integer.MAX_VALUE;
-        int maxX = Integer.MIN_VALUE;
+        long[] y = new long[N];
+        long minX = Integer.MAX_VALUE;
+        long maxX = Integer.MIN_VALUE;
 
         for (int i = 0; i < N; i++) {
-            int X = in.nextInt();
+            long X = in.nextInt();
             y[i] = in.nextInt();
-            if (X > maxX) {
-                maxX = X;
-            }
-            if (X < minX) {
-                minX = X;
-            }
+            maxX = Math.max(X, maxX);
+            minX = Math.min(X, minX);
         }
         Arrays.sort(y);
-        long median = y[N/2];
-        long result = 0;
-        for (long Y:y) {
+        long median = y[N / 2];
+        long result = maxX - minX;
+        for (long Y : y) {
             result += Math.abs(Y - median);
         }
-        System.out.println((maxX - minX) + result);
+        System.out.println(result);
     }
 }

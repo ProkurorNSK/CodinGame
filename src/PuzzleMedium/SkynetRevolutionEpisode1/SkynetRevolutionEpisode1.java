@@ -1,6 +1,6 @@
 package PuzzleMedium.SkynetRevolutionEpisode1;
 
-import java.util.*;
+import java.util.Scanner;
 
 public class SkynetRevolutionEpisode1 {
 
@@ -17,7 +17,6 @@ public class SkynetRevolutionEpisode1 {
         for (int i = 0; i < L; i++) {
             int N1 = in.nextInt(); // N1 and N2 defines a link between these nodes
             int N2 = in.nextInt();
-            System.err.println(N1 + " " + N2);
             links[i][0] = N1;
             links[i][1] = N2;
         }
@@ -49,7 +48,7 @@ public class SkynetRevolutionEpisode1 {
         }
     }
 
-    private static boolean isExit(int point) {
+    static boolean isExit(int point) {
         boolean result = false;
         for (int exit: exits) {
             if (exit == point) {
