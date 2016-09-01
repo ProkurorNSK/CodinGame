@@ -9,74 +9,84 @@ public class BenderEpisode1 {
     private static int currentDirection = 1; //1-SOUTH; 2-EAST; 3-NORTH; 4-WEST
     private static int[] shift;
     private static boolean breakerMode = false;
-    private static boolean reverse = false;
+    private static boolean reverseMode = false;
+    private static HashMap<int[], Integer> steps;
+    private static boolean isLoop = false;
 
     public static void main(String args[]) {
         Scanner in = new Scanner(System.in);
         int L = in.nextInt();
         int C = in.nextInt();
         in.nextLine();
-        map = new char[C][L];
+        map = new char[L][C];
         currentPosition = new int[2];
         shift = new int[2];
+        steps = new HashMap<>(0);
+        int[][] teleports = new int[2][2];
+        int indexTeleport = 0;
 
         for (int i = 0; i < L; i++) {
             String str = in.nextLine();
             if (str.indexOf('@') != -1) {
-                currentPosition[0] = str.indexOf('@');
-                currentPosition[1] = i;
+                currentPosition[1] = str.indexOf('@');
+                currentPosition[0] = i;
             }
-            System.arraycopy(str.toCharArray(), 0, map[i], 0, L);
+            if (str.indexOf('T') != -1) {
+                teleports[indexTeleport][1] = str.indexOf('T');
+                teleports[indexTeleport][0] = i;
+                indexTeleport++;
+            }
+            System.arraycopy(str.toCharArray(), 0, map[i], 0, C);
         }
 
         boolean endGame = false;
-        while (!endGame) {
-
+        while (!endGame && !isLoop) {
             getDirection();
-            getShift();
-
-            switch (map[currentPosition[1] + shift[1]][currentPosition[0] + shift[0]]) {
+            makeMove();
+            switch (lastSymbol) {
                 case '$':
-                    makeMove();
                     endGame = true;
                     break;
                 case ' ':
                 case 'X':
-                    makeMove();
                     break;
                 case 'I':
-                    makeMove();
-                    reverse = !reverse;
+                    reverseMode = !reverseMode;
+                    break;
+                case 'T':
+                    map[currentPosition[0]][currentPosition[1]] = (lastSymbol == 'X') ? ' ' : lastSymbol;
+                    if (teleports[0][0] == currentPosition[0] && teleports[0][1] == currentPosition[1]) {
+                        currentPosition[0] = teleports[1][0];
+                        currentPosition[1] = teleports[1][1];
+                    } else {
+                        currentPosition[0] = teleports[0][0];
+                        currentPosition[1] = teleports[0][1];
+                    }
+                    lastSymbol = map[currentPosition[0]][currentPosition[1]];
+                    map[currentPosition[0]][currentPosition[1]] = '@';
                     break;
                 case 'S':
-                    makeMove();
                     currentDirection = 1;
                     break;
                 case 'E':
-                    makeMove();
                     currentDirection = 2;
                     break;
                 case 'N':
-                    makeMove();
                     currentDirection = 3;
                     break;
                 case 'W':
-                    makeMove();
                     currentDirection = 4;
                     break;
                 case 'B':
-                    makeMove();
                     breakerMode = !breakerMode;
                     break;
             }
-
             printMap();
             in.nextLine();
-//            System.out.println(currentPosition[0] + " " + currentPosition[1] + " " + currentDirection);
         }
     }
 
-    private static void print() {
+    private static void printResult() {
         switch (currentDirection) {
             case 1:
                 System.out.println("SOUTH");
@@ -94,22 +104,28 @@ public class BenderEpisode1 {
     }
 
     private static void makeMove() {
-        map[currentPosition[1]][currentPosition[0]] = (lastSymbol == 'X' || lastSymbol == 'B') ? ' ' : lastSymbol;
+        int[] temp = new int[2];
+        System.arraycopy(currentPosition,0, temp, 0, 2);
+        steps.put(temp, currentDirection);
+        map[currentPosition[0]][currentPosition[1]] = (lastSymbol == 'X') ? ' ' : lastSymbol;
         currentPosition[0] += shift[0];
         currentPosition[1] += shift[1];
-        lastSymbol = map[currentPosition[1]][currentPosition[0]];
-        map[currentPosition[1]][currentPosition[0]] = '@';
-        print();
+        lastSymbol = map[currentPosition[0]][currentPosition[1]];
+        map[currentPosition[0]][currentPosition[1]] = '@';
+        printResult();
+        if (steps.get(currentPosition) == currentDirection) {
+            isLoop = true;
+        }
     }
 
     private static void getDirection() {
         getShift();
-        char nextField = map[currentPosition[1] + shift[1]][currentPosition[0] + shift[0]];
+        char nextField = map[currentPosition[0] + shift[0]][currentPosition[1] + shift[1]];
         if (nextField == '#' || (nextField == 'X' && !breakerMode)) {
             for (int i = 1; i < 5; i++) {
-                currentDirection = (reverse) ? 5 - i : i;
+                currentDirection = (reverseMode) ? 5 - i : i;
                 getShift();
-                nextField = map[currentPosition[1] + shift[1]][currentPosition[0] + shift[0]];
+                nextField = map[currentPosition[0] + shift[0]][currentPosition[1] + shift[1]];
                 if (nextField != '#' && nextField != 'X') {
                     break;
                 }
@@ -120,20 +136,20 @@ public class BenderEpisode1 {
     private static void getShift() {
         switch (currentDirection) {
             case 1:
-                shift[0] = 0;
-                shift[1] = 1;
-                break;
-            case 2:
                 shift[0] = 1;
                 shift[1] = 0;
                 break;
-            case 3:
+            case 2:
                 shift[0] = 0;
-                shift[1] = -1;
+                shift[1] = 1;
                 break;
-            case 4:
+            case 3:
                 shift[0] = -1;
                 shift[1] = 0;
+                break;
+            case 4:
+                shift[0] = 0;
+                shift[1] = -1;
                 break;
         }
     }
