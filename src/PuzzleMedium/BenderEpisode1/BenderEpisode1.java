@@ -5,10 +5,11 @@ import java.util.*;
 public class BenderEpisode1 {
     private static char lastSymbol = ' ';
     private static char[][] map;
-    private static int[] currentPosition = new int[2];
+    private static int[] currentPosition;
     private static int currentDirection = 1; //1-SOUTH; 2-EAST; 3-NORTH; 4-WEST
     private static int[] shift;
     private static boolean breakerMode = false;
+    private static boolean reverse = false;
 
     public static void main(String args[]) {
         Scanner in = new Scanner(System.in);
@@ -16,6 +17,7 @@ public class BenderEpisode1 {
         int C = in.nextInt();
         in.nextLine();
         map = new char[C][L];
+        currentPosition = new int[2];
         shift = new int[2];
 
         for (int i = 0; i < L; i++) {
@@ -35,35 +37,36 @@ public class BenderEpisode1 {
 
             switch (map[currentPosition[1] + shift[1]][currentPosition[0] + shift[0]]) {
                 case '$':
+                    makeMove();
                     endGame = true;
+                    break;
+                case ' ':
+                case 'X':
                     makeMove();
                     break;
-                case ' ': case 'X':
+                case 'I':
                     makeMove();
+                    reverse = !reverse;
                     break;
                 case 'S':
-                    getShift();
                     makeMove();
                     currentDirection = 1;
                     break;
                 case 'E':
-                    getShift();
                     makeMove();
                     currentDirection = 2;
                     break;
                 case 'N':
-                    getShift();
                     makeMove();
                     currentDirection = 3;
                     break;
                 case 'W':
-                    getShift();
                     makeMove();
                     currentDirection = 4;
                     break;
                 case 'B':
-                    breakerMode = breakerMode ? false : true;
                     makeMove();
+                    breakerMode = !breakerMode;
                     break;
             }
 
@@ -104,7 +107,7 @@ public class BenderEpisode1 {
         char nextField = map[currentPosition[1] + shift[1]][currentPosition[0] + shift[0]];
         if (nextField == '#' || (nextField == 'X' && !breakerMode)) {
             for (int i = 1; i < 5; i++) {
-                currentDirection = i;
+                currentDirection = (reverse) ? 5 - i : i;
                 getShift();
                 nextField = map[currentPosition[1] + shift[1]][currentPosition[0] + shift[0]];
                 if (nextField != '#' && nextField != 'X') {
