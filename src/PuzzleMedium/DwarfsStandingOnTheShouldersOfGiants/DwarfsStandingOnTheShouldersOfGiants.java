@@ -16,15 +16,17 @@ public class DwarfsStandingOnTheShouldersOfGiants {
         // Write an action using System.out.println()
         // To debug: System.err.println("Debug messages...");
 
-
+        graph.getChains();
+        graph.printChains();
+        System.out.println(graph.getLongestChain());
         // The number of people involved in the longest succession of influences
-        System.out.println(graph.getLongestPath(0));
     }
 }
 
 class DirectedGraph {
 
     private Map<Integer, List<Integer>> vertexMap = new HashMap<>();
+    private ArrayList<String> chains = new ArrayList<>(0);
 
     private void addVertex(Integer vertex) {
         if (!hasVertex(vertex)) {
@@ -54,19 +56,36 @@ class DirectedGraph {
         return vertexMap;
     }
 
-    public int getLongestPath(int result) {
-        for (int i = 0; i < vertexMap.size(); i++) {
-            List<Integer> edges = vertexMap.get(i);
-            if (edges != null && (result != 0 || edges.size() == 0)) {
-                result++;
-                for (int j = 0; j < vertexMap.size(); j++) {
-                    List<Integer> edgesUp = vertexMap.get(i);
-                    if (edgesUp.contains(i)) {
-                        result = getLongestPath(result);
-                    }
-                }
+    public void getChains() {
+        for (Map.Entry<Integer, List<Integer>> vertex : vertexMap.entrySet()) {
+            getChain(vertex.getKey(), "");
+        }
+    }
+
+    private void getChain(int vertex, String chain) {
+        List<Integer> edges = vertexMap.get(vertex);
+        chain += vertex + " ";
+        if (edges.size() == 0) {
+            chains.add(chain);
+        } else {
+            for (int edge : edges) {
+                getChain(edge, chain);
             }
         }
-        return result;
+    }
+
+    public void printChains() {
+        for (String chain: chains) {
+            System.out.println(chain);
+        }
+    }
+
+    public int getLongestChain() {
+        int max = 0;
+        for (String chain: chains) {
+            String[] count = chain.split(" ");
+            max = Math.max(max, count.length);
+        }
+        return max;
     }
 }
