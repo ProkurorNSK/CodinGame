@@ -10,8 +10,10 @@ public class BenderEpisode1 {
     private static int[] shift;
     private static boolean breakerMode = false;
     private static boolean reverseMode = false;
-    private static HashMap<int[], Integer> steps;
+    private static ArrayList<int[]> steps;
     private static boolean isLoop = false;
+    private static ArrayList<Integer> results;
+    private static int countX = 0;
 
     public static void main(String args[]) {
         Scanner in = new Scanner(System.in);
@@ -21,9 +23,10 @@ public class BenderEpisode1 {
         map = new char[L][C];
         currentPosition = new int[2];
         shift = new int[2];
-        steps = new HashMap<>(0);
+        steps = new ArrayList<>(0);
         int[][] teleports = new int[2][2];
         int indexTeleport = 0;
+        results = new ArrayList<>(0);
 
         for (int i = 0; i < L; i++) {
             String str = in.nextLine();
@@ -48,7 +51,9 @@ public class BenderEpisode1 {
                     endGame = true;
                     break;
                 case ' ':
+                    break;
                 case 'X':
+                    countX++;
                     break;
                 case 'I':
                     reverseMode = !reverseMode;
@@ -82,12 +87,20 @@ public class BenderEpisode1 {
                     break;
             }
             printMap();
+            System.out.println("Breaker - " + breakerMode + " :Reverse - " + reverseMode);
             in.nextLine();
+        }
+        if (isLoop) {
+            System.out.println("LOOP");
+        } else {
+            for (int direction: results) {
+                printResult(direction);
+            }
         }
     }
 
-    private static void printResult() {
-        switch (currentDirection) {
+    private static void printResult(int direction) {
+        switch (direction) {
             case 1:
                 System.out.println("SOUTH");
                 break;
@@ -104,17 +117,28 @@ public class BenderEpisode1 {
     }
 
     private static void makeMove() {
-        int[] temp = new int[2];
-        System.arraycopy(currentPosition,0, temp, 0, 2);
-        steps.put(temp, currentDirection);
+        int[] step = {currentPosition[0], currentPosition[1], currentDirection, breakerMode ? 1 : 0, reverseMode ? 1 : 0, countX};
+        steps.add(step);
+
         map[currentPosition[0]][currentPosition[1]] = (lastSymbol == 'X') ? ' ' : lastSymbol;
         currentPosition[0] += shift[0];
         currentPosition[1] += shift[1];
         lastSymbol = map[currentPosition[0]][currentPosition[1]];
         map[currentPosition[0]][currentPosition[1]] = '@';
-        printResult();
-        if (steps.get(currentPosition) == currentDirection) {
-            isLoop = true;
+        results.add(currentDirection);
+
+        int[] nextStep = new int[6];
+        nextStep[0] = currentPosition[0];
+        nextStep[1] = currentPosition[1];
+        nextStep[2] = currentDirection;
+        nextStep[3] = breakerMode ? 1 : 0;
+        nextStep[4] = reverseMode ? 1 : 0;
+        nextStep[5] = countX;
+        for (int[] cStep : steps) {
+            if (Arrays.equals(cStep, nextStep)) {
+                isLoop = true;
+                break;
+            }
         }
     }
 
