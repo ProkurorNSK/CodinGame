@@ -7,11 +7,18 @@ public class HillNotationAndHillOrder {
         Scanner in = new Scanner(System.in);
         int numCompounds = in.nextInt();
         in.nextLine();
+        ArrayList<> formuls;
+        HashMap<String, Integer> formula;
+        String buffer = "";
         for (int i = 0; i < numCompounds; i++) {
-            String compound = in.nextLine();
+            char[] compound = in.nextLine().toCharArray();
+            for (char symbol: compound) {
+                if (Character.isUpperCase(symbol)) {
+                    buffer += symbol;
+                } else
+            }
+
         }
-
-
 
         System.out.println("answer");
     }
