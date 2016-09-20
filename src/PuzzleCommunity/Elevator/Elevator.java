@@ -11,14 +11,18 @@ public class Elevator {
         int k = in.nextInt();
         int m = in.nextInt();
 
-        int shift = m - k;
-        int targetFlor = k;
+        boolean isSolution = false;
 
-        if (Math.abs(m-k)%Math.abs(b-a) == 0) {
-
-        } else {
-            System.out.println("IMPOSSIBLE");
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (m-k == a*i - b*j) {
+                    System.out.println(i+j);
+                    isSolution = true;
+                    break;
+                }
+            }
+            if (isSolution) break;
         }
-
+        if (!isSolution) System.out.println("IMPOSSIBLE");
     }
 }
