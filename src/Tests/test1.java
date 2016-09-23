@@ -74,9 +74,12 @@ public class test1 {
 
         System.out.println("future done? " + future.isDone());
 
-//        Integer result = future.get();
-
-        System.out.println("future done? " + future.isDone());
-//        System.out.print("result: " + result);
+        try {
+            Integer result = future.get();
+            System.out.println("future done? " + future.isDone());
+            System.out.print("result: " + result);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 }
