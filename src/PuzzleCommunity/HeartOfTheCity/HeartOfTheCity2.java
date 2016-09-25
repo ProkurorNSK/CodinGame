@@ -6,7 +6,7 @@ public class HeartOfTheCity2 {
     public static void main(String args[]) {
 //        Scanner in = new Scanner(System.in);
 //        long n = in.nextLong();
-        long n = 999999;
+        long n = 9999999;
         long time = System.currentTimeMillis();
         long result = 0;
         for (int i = 1 ; i <= (n-1)/2; i++) {
