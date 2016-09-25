@@ -18,6 +18,7 @@ public class MiniMusicPlayer3 {
         ml = new MyDrawPanel();
         f.setContentPane(ml);
         f.setBounds(30, 30, 300, 300);
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setVisible(true);
     }
 
