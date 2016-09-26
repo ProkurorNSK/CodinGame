@@ -5,9 +5,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.ArrayList;
 
-public class BeatBox {
+public class BeatBox implements ItemListener {
 
     private JPanel mainPanel;
     private ArrayList<JCheckBox> checkBoxList;
@@ -20,7 +22,7 @@ public class BeatBox {
             "Crash Cymbal", "Hand Clap", "High Tom", "Hi Bongo",
             "Maracas", "Whistle", "Low Conga", "Cowbell",
             "Vibraslap", "Low-mid Tom", "High Agogo", "Open Hi Conga"};
-    private final int[] inctruments = {35, 42, 46, 38, 49, 39, 50, 60, 70, 72, 64, 56, 58, 47, 67, 63};
+    private final int[] instruments = {35, 42, 46, 38, 49, 39, 50, 60, 70, 72, 64, 56, 58, 47, 67, 63};
 
     public static void main(String[] args) {
         new BeatBox().buildGUI();
@@ -70,6 +72,7 @@ public class BeatBox {
 
         for (int i = 0; i < 256; i++) {
             JCheckBox c = new JCheckBox();
+            c.addItemListener(this);
             c.setSelected(false);
             checkBoxList.add(c);
             mainPanel.add(c);
@@ -101,7 +104,7 @@ public class BeatBox {
 
         for (int i = 0; i < 16; i++) {
             trackList = new int[16];
-            int key = inctruments[i];
+            int key = instruments[i];
 
             for (int j = 0; j < 16; j++) {
                 JCheckBox jc = checkBoxList.get(j + 16 * i);
@@ -147,6 +150,11 @@ public class BeatBox {
             e.printStackTrace();
         }
         return event;
+    }
+
+    @Override
+    public void itemStateChanged(ItemEvent e) {
+        buildTrackAndStart();
     }
 
     private class MyStartListener implements ActionListener {
