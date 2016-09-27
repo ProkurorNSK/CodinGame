@@ -5,7 +5,7 @@ import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
-public class Box implements Serializable{
+class Box implements Serializable{
     private int width;
     private int height;
 
