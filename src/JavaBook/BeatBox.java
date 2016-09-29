@@ -7,6 +7,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 public class BeatBox implements ItemListener {
@@ -53,6 +56,10 @@ public class BeatBox implements ItemListener {
         JButton downTempo = new JButton("Tempo Down");
         downTempo.addActionListener(new MyDownTempoListener());
         buttonBox.add(downTempo);
+
+        JButton serializeIt = new JButton("Serialize It");
+        serializeIt.addActionListener(new MySendListener());
+        buttonBox.add(serializeIt);
 
         Box nameBox = new Box(BoxLayout.Y_AXIS);
         for (int i = 0; i < instrumentNames.length; i++) {
@@ -184,6 +191,27 @@ public class BeatBox implements ItemListener {
         public void actionPerformed(ActionEvent e) {
             float tempoFactor = sequencer.getTempoFactor();
             sequencer.setTempoFactor((float) (tempoFactor * 0.97));
+        }
+    }
+
+    private class MySendListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            boolean[] checkboxState = new boolean[256];
+            for (int i = 0; i < 256; i++) {
+                JCheckBox check  = checkBoxList.get(i);
+                if (check.isSelected()) {
+                    checkboxState[i] = true;
+                }
+            }
+
+            try {
+                FileOutputStream fileStream = new FileOutputStream(new File("Chackbox.ser"));
+                ObjectOutputStream os = new ObjectOutputStream(fileStream);
+                os.writeObject(checkboxState);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
         }
     }
 }
