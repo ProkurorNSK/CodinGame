@@ -18,7 +18,7 @@ public class QuizCardBuilder {
 
     // additional, bonus method not found in any book!
 
-    public static void main (String[] args) {
+    public static void main(String[] args) {
         QuizCardBuilder builder = new QuizCardBuilder();
         builder.go();
     }
@@ -29,7 +29,7 @@ public class QuizCardBuilder {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  // title bar
         JPanel mainPanel = new JPanel();
         Font bigFont = new Font("sanserif", Font.BOLD, 24);
-        question = new JTextArea(6,20);
+        question = new JTextArea(6, 20);
         question.setLineWrap(true);
         question.setWrapStyleWord(true);
         question.setFont(bigFont);
@@ -38,7 +38,7 @@ public class QuizCardBuilder {
         qScroller.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         qScroller.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
-        answer = new JTextArea(6,20);
+        answer = new JTextArea(6, 20);
         answer.setLineWrap(true);
         answer.setWrapStyleWord(true);
         answer.setFont(bigFont);
@@ -72,7 +72,7 @@ public class QuizCardBuilder {
         frame.setJMenuBar(menuBar);
 
         frame.getContentPane().add(BorderLayout.CENTER, mainPanel);
-        frame.setSize(500,600);
+        frame.setSize(500, 600);
         frame.setVisible(true);
     }
 
@@ -112,14 +112,12 @@ public class QuizCardBuilder {
 
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-            Iterator cardIterator = cardList.iterator();
-            while (cardIterator.hasNext()) {
-                QuizCard card = (QuizCard) cardIterator.next();
+            for (QuizCard card: cardList) {
                 writer.write(card.getQuestion() + "/");
                 writer.write(card.getAnswer() + "\n");
             }
             writer.close();
-        } catch(Exception ex) {
+        } catch (Exception ex) {
             System.out.println("couldn't write the cardList out");
             ex.printStackTrace();
         }
