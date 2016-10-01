@@ -5,7 +5,7 @@ import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
-class fBox implements Serializable{
+public class fBox implements Serializable{
     private int width;
     private int height;
 
