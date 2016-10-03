@@ -8,8 +8,8 @@ public class RyanAndMonicaJob implements Runnable
         RyanAndMonicaJob theJob = new RyanAndMonicaJob();
         Thread one = new Thread(theJob);
         Thread two = new Thread(theJob);
-        one.setName("Ryan");
-        two.setName("Monica");
+        one.setName("Райан");
+        two.setName("Моника");
         one.start();
         two.start();
     }
@@ -20,27 +20,27 @@ public class RyanAndMonicaJob implements Runnable
             makeWithdrawal(10);
             if (account.getBalance() < 0)
             {
-                System.out.println("Overdrawn!");
+                System.out.println("Превышение лимита!");
             }
         }
     }
-    //  to demonstrate the "overdrawn" error remove the "synchronized" modifier
+
     private synchronized void makeWithdrawal(int amount)
     {
         if (account.getBalance() >= amount)
         {
-            System.out.println(Thread.currentThread().getName() + " is about to withdrawal");
+            System.out.println(Thread.currentThread().getName() + " собирается снять деньги");
             try {
-                System.out.println(Thread.currentThread().getName() + " is going to sleep");
+                System.out.println(Thread.currentThread().getName() + " идет подремать");
                 Thread.sleep(500);
             } catch (InterruptedException ex) { ex.printStackTrace(); }
-            System.out.println(Thread.currentThread().getName() + " woke up");
+            System.out.println(Thread.currentThread().getName() + " просытаеться");
             account.withdraw(amount);
-            System.out.println(Thread.currentThread().getName() + " completes the withdrawal");
+            System.out.println(Thread.currentThread().getName() + " заканчивает транзакцию");
         }
         else
         {
-            System.out.println("Sorry, not enough for " + Thread.currentThread().getName());
+            System.out.println("Извините, для клиента " + Thread.currentThread().getName() + " недостаточно денег");
         }
     }
 

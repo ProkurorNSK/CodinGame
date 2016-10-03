@@ -7,7 +7,7 @@ public class ChuckNorris {
     public static void main(String args[]) {
         Scanner in = new Scanner(System.in);
 //        String MESSAGE = in.nextLine();
-        String MESSAGE = "%";
+        String MESSAGE = "CCC";
 
         String binaryString = "";
         String result = "";
@@ -16,6 +16,7 @@ public class ChuckNorris {
 
         for (char symbol : MESSAGE.toCharArray()) {
             code = Integer.toBinaryString(symbol);
+            System.out.println(code);
             for (int i = 0; i < 7 - code.length(); i++) {
                 code = "0" + code;
             }
