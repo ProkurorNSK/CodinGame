@@ -27,8 +27,8 @@ public class ASCIIArt {
         for (int i = 0; i < charArray.length; i++) {
             indexAray[i] = ((int) charArray[i] - 65 < 0 || (int) charArray[i] - 65 > 25) ? 26 : (int) charArray[i] - 65;
         }
-        for (int i = 0; i < indexAray.length; i++) {
-            System.out.println(indexAray[i]);
+        for (int anIndexAray : indexAray) {
+            System.out.println(anIndexAray);
         }
 
         String[] result = new String[H];
@@ -36,8 +36,8 @@ public class ASCIIArt {
 
         for (int i = 0; i < H; i++) {
             result[i] = "";
-            for (int j = 0; j < indexAray.length; j++) {
-                ROW[i].getChars(indexAray[j]*L, (indexAray[j] + 1) *L, symbol, 0);
+            for (int anIndexAray : indexAray) {
+                ROW[i].getChars(anIndexAray * L, (anIndexAray + 1) * L, symbol, 0);
                 result[i] = result[i] + new String(symbol);
             }
         }

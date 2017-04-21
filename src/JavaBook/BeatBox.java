@@ -57,7 +57,7 @@ public class BeatBox{
         JPanel background = new JPanel(layout);
         background.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
 
-        checkboxList = new ArrayList<JCheckBox>();
+        checkboxList = new ArrayList<>();
         Box buttonBox = new Box(BoxLayout.Y_AXIS);
 
         JButton start = new JButton("Start");
@@ -179,7 +179,7 @@ public class BeatBox{
         for (int i = 0; i < 16; i++) {
             Integer num = (Integer) it.next();
             if (num != null) {
-                int numKey = num.intValue();
+                int numKey = num;
                 track.add(makeEvent(144, 9, numKey, 100, i));
                 track.add(makeEvent(128, 9, numKey, 100, i+1));
             }
