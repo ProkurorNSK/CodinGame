@@ -3,15 +3,20 @@ package Contests.CodersOfCaribbean;
 import java.util.*;
 
 public class CodersOfCaribbean {
+    private static final int WIDE = 23;
+    private static final int HIGH = 21;
+
     public static void main(String args[]) {
         Scanner in = new Scanner(System.in);
+        int xRandom = getRandom(WIDE);
+        int yRandom = getRandom(HIGH);
+        List<Ship> myShips = new ArrayList<>();
+        List<Ship> enemyShips = new ArrayList<>();
 
         // game loop
         while (true) {
             int myShipCount = in.nextInt(); // the number of remaining ships
             int entityCount = in.nextInt(); // the number of entities (e.g. ships, mines or cannonballs)
-            List<Ship> myShips = new ArrayList<>();
-            List<Ship> enemyShips = new ArrayList<>();
             List<Barrel> barrels = new ArrayList<>();
             List<CannonBall> balls = new ArrayList<>();
             List<Mine> mines = new ArrayList<>();
@@ -28,9 +33,19 @@ public class CodersOfCaribbean {
                 switch (entityType) {
                     case "SHIP":
                         if (arg4 == 1) {
-                            myShips.add(new Ship(entityId, x, y, arg1, arg2, arg3));
+                            Ship foundEntity = findEntity(myShips, entityId);
+                            if (foundEntity == null) {
+                                myShips.add(new Ship(entityId, x, y, arg1, arg2, arg3));
+                            } else {
+                                foundEntity.update(x, y, arg1, arg2, arg3);
+                            }
                         } else if (arg4 == 0) {
-                            enemyShips.add(new Ship(entityId, x, y, arg1, arg2, arg3));
+                            Ship foundEntity = findEntity(enemyShips, entityId);
+                            if (foundEntity == null) {
+                                enemyShips.add(new Ship(entityId, x, y, arg1, arg2, arg3));
+                            } else {
+                                foundEntity.update(x, y, arg1, arg2, arg3);
+                            }
                         }
                         break;
                     case "BARREL":
@@ -45,14 +60,16 @@ public class CodersOfCaribbean {
                 }
             }
 
+            myShips.removeIf(ship -> !ship.isActive);
+            enemyShips.removeIf(ship -> !ship.isActive);
+
 //            System.err.println("myShips " + myShips.size());
 //            System.err.println("enemyShips " + enemyShips.size());
-            System.err.println("barrels " + barrels.size());
-            System.err.println("balls " + balls.size());
-            System.err.println("mines " + mines.size());
+//            System.err.print("barrels - " + barrels.size());
+//            System.err.print(": balls - " + balls.size());
+//            System.err.println(": mines - " + mines.size());
 
             for (int i = 0; i < myShipCount; i++) {
-
                 Ship ship = myShips.get(i);
 
                 double minDistance = Integer.MAX_VALUE;
@@ -64,94 +81,228 @@ public class CodersOfCaribbean {
                         nearestBarrel = barrel;
                     }
                 }
-//                System.err.println("X " + ship.x);
-//                System.err.println("Y " + ship.y);
-                System.err.println("minDistance" + minDistance);
 
-                Ship featureShip = ship.move();
-                Ship featureShip2 = featureShip.move();
+                Boolean alarm = false;
+                Ship newShip = ship.calculateMove().calculateMove();
+                System.err.println(newShip.headShip.x + "-" + newShip.headShip.y);
+                System.err.println(newShip.x + "-" + newShip.y);
+                System.err.println(newShip.tailShip.x + "-" + newShip.tailShip.y);
                 for (Mine mine : mines) {
-                    if (featureShip.isCollision(mine) || featureShip2.isCollision(mine)) {
-//                        System.out.println("MOVE " +  + " " + );
-                        System.out.println("MOVE 0 0");
-                        nearestBarrel = null;
+                    System.err.println(mine.x + "*" + mine.y);
+                    if (newShip.isCollision(mine)) {
+                        System.err.println("MINE: " + mine.x + "-" + mine.y);
+                        alarm = true;
                         break;
                     }
                 }
 
-                if (nearestBarrel != null) {
-                    System.out.println("MOVE " + nearestBarrel.x + " " + nearestBarrel.y);
+                Ship target = null;
+                if (ship.canFire) {
+                    for (Ship enemy : enemyShips) {
+//                        System.err.println(i + "! distanceToEnemy - " + ship.getDistance(enemy));
+                        if (ship.getDistance(enemy) <= 10 && ship.speed == 0) {
+                            target = enemy;
+                            break;
+                        }
+                    }
+                }
+
+                if (alarm) {
+                    System.out.println("SLOWER");
+                } else if (target != null) {
+                    ship.fire(target);
+                } else if (nearestBarrel != null) {
+                    ship.move(nearestBarrel);
                 } else {
-                    System.out.println("MOVE 11 10");
+                    if (ship.x == xRandom && ship.y == yRandom) {
+                        xRandom = getRandom(WIDE);
+                        yRandom = getRandom(HIGH);
+                    }
+                    ship.move(xRandom, yRandom);
                 }
             }
+            for (Ship ship : myShips) {
+                ship.isActive = false;
+            }
+            for (Ship ship : enemyShips) {
+                ship.isActive = false;
+            }
         }
+
+    }
+
+    private static int getRandom(int number) {
+        return (int) (Math.random() * number);
+    }
+
+    private static Ship findEntity(List<Ship> list, int id) {
+        Ship result = null;
+        for (Ship entity : list) {
+            if (entity.id == id) {
+                result = entity;
+            }
+        }
+        return result;
     }
 
     static class Ship extends Entity {
         int orientation;
         int speed;
         int stockOfRum;
-        private int offset;
-
+        boolean canFire;
+        boolean canSpawn;
+        int lastFireTurn;
+        int lastSpawnTurn;
+        int xPoint;
+        int yPoint;
+        Entity headShip;
+        Entity tailShip;
 
         Ship(int id, int x, int y, int orientation, int speed, int stockOfRum) {
             super(id, x, y);
             this.orientation = orientation;
             this.speed = speed;
             this.stockOfRum = stockOfRum;
-            this.offset = this.y % 2;
+            canFire = true;
+            canSpawn = true;
+            lastFireTurn = 0;
+            lastSpawnTurn = 0;
+            xPoint = x;
+            yPoint = y;
+            headShip = calculateHead();
+            tailShip = calculateTail();
         }
 
-        Ship move() {
-            int x = this.x;
-            int y = this.y;
+        Entity calculateHead() {
+            Entity result = null;
             switch (orientation) {
                 case 0:
-                    x += speed;
+                    result = new Entity(id, x + 1, y);
                     break;
                 case 1:
-                    y -= speed;
-                    x += speed + offset - 1;
+                    result = new Entity(id, x + offset, y - 1);
                     break;
                 case 2:
-                    y -= speed;
-                    x -= speed - offset;
+                    result = new Entity(id, x + offset - 1, y - 1);
                     break;
                 case 3:
-                    x -= speed;
+                    result = new Entity(id, x - 1, y);
                     break;
                 case 4:
-                    y += speed;
-                    x -= speed - offset;
+                    result = new Entity(id, x + offset - 1, y + 1);
                     break;
                 case 5:
-                    y += speed;
-                    x += speed + offset - 1;
+                    result = new Entity(id, x + offset, y + 1);
                     break;
             }
-            return new Ship(0, x, y, orientation, speed, 0);
+            return result;
+        }
+
+        Entity calculateTail() {
+            Entity result = null;
+            switch (orientation) {
+                case 0:
+                    result = new Entity(id, x - 1, y);
+                    break;
+                case 1:
+                    result = new Entity(id, x + offset - 1, y + 1);
+                    break;
+                case 2:
+                    result = new Entity(id, x + offset, y + 1);
+                    break;
+                case 3:
+                    result = new Entity(id, x + 1, y);
+                    break;
+                case 4:
+                    result = new Entity(id, x + offset, y - 1);
+                    break;
+                case 5:
+                    result = new Entity(id, x + offset - 1, y - 1);
+                    break;
+            }
+            return result;
+        }
+
+        Ship calculateMove() {
+            int x = this.x;
+            int y = this.y;
+            Ship result;
+            if (speed != 0) {
+                switch (orientation) {
+                    case 0:
+                        x += speed;
+                        break;
+                    case 1:
+                        y -= speed;
+                        x += speed + offset - 1;
+                        break;
+                    case 2:
+                        y -= speed;
+                        x -= speed - offset;
+                        break;
+                    case 3:
+                        x -= speed;
+                        break;
+                    case 4:
+                        y += speed;
+                        x -= speed - offset;
+                        break;
+                    case 5:
+                        y += speed;
+                        x += speed + offset - 1;
+                        break;
+                }
+                result = new Ship(id, x, y, orientation, speed, stockOfRum);
+            } else {
+                result = new Ship(id, this.x, this.y, orientation, speed, stockOfRum);
+            }
+            return result;
+        }
+
+        void move(int x, int y) {
+            if (canSpawn && speed > 0 && x == xPoint && y == yPoint) {
+                spawnMine();
+            } else {
+                System.out.println("MOVE " + x + " " + y);
+                xPoint = x;
+                yPoint = y;
+            }
+        }
+
+        void move(Entity entity) {
+            move(entity.x, entity.y);
+        }
+
+        void update(int x, int y, int orientation, int speed, int stockOfRum) {
+            super.update(x, y);
+            this.orientation = orientation;
+            this.speed = speed;
+            this.stockOfRum = stockOfRum;
+            if (!canFire && turn - lastFireTurn > 1) {
+                canFire = true;
+            }
+            if (!canSpawn && turn - lastSpawnTurn > 4) {
+                canSpawn = true;
+            }
+            headShip = calculateHead();
+            tailShip = calculateTail();
+        }
+
+        void fire(Ship target) {
+            System.out.println("FIRE " + target.x + " " + target.y);
+            canFire = false;
+            lastFireTurn = turn;
+        }
+
+        void spawnMine() {
+            System.out.println("MINE");
+            canSpawn = false;
+            lastSpawnTurn = turn;
         }
 
         @Override
         boolean isCollision(Entity entity) {
-            Entity headShip;
-            Entity backShip;
-            if (this.orientation == 0 || this.orientation == 3) {
-                headShip = new Entity(0, this.x - 1, this.y);
-                backShip = new Entity(0, this.x + 1, this.y);
-            } else if (this.orientation == 1 || this.orientation == 4) {
-                headShip = new Entity(0, this.x + offset, this.y - 1);
-                backShip = new Entity(0, this.x + offset - 1, this.y + 1);
-            } else {
-                headShip = new Entity(0, this.x + offset - 1, this.y - 1);
-                backShip = new Entity(0, this.x + offset, this.y + 1);
-            }
-            System.err.println(headShip.x + "-" + headShip.y);
-            System.err.println(this.x + "-" + this.y);
-            System.err.println(backShip.x + "-" + backShip.y);
-            System.err.println(entity.x + "*" + entity.y);
-            return entity.isCollision(this) || entity.isCollision(headShip) || entity.isCollision(backShip);
+            return entity.isCollision(this) || headShip.isCollision(entity) || tailShip.isCollision(entity);
         }
     }
 
@@ -185,11 +336,25 @@ public class CodersOfCaribbean {
         int id;
         int x;
         int y;
+        int offset;
+        int turn;
+        boolean isActive;
 
         Entity(int id, int x, int y) {
             this.id = id;
             this.x = x;
             this.y = y;
+            this.turn = 1;
+            this.isActive = true;
+            offset = this.y % 2;
+        }
+
+        void update(int x, int y) {
+            this.x = x;
+            this.y = y;
+            offset = this.y % 2;
+            turn++;
+            isActive = true;
         }
 
         double getDistance(Entity entity) {
