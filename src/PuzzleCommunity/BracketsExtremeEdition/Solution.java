@@ -12,14 +12,39 @@ class Solution {
 
     public static void main(String args[]) {
         Scanner in = new Scanner(System.in);
-        String expression = in.next();
+        String expression = "{([{S}]]6K[()]}";
 
-        String result = findAndDeletePair(expression);
-
-        System.out.println("true/false");
-    }
-
-    static String findAndDeletePair(String inStr) {
-        return findAndDeletePair(inStr);
+        char[] symbols = expression.toCharArray();
+        LinkedList<Character> stack = new LinkedList<>();
+        for (char symbol : symbols) {
+            switch (symbol) {
+                case '(':
+                case '[':
+                case '{':
+                    stack.add(0, symbol);
+                    break;
+                case ')':
+                    if (!stack.isEmpty() && stack.get(0) == '(') {
+                        stack.remove(0);
+                    } else {
+                        stack.add(0, symbol);
+                    }
+                    break;
+                case ']':
+                    if (!stack.isEmpty() && stack.get(0) == '[') {
+                        stack.remove(0);
+                    } else {
+                        stack.add(0, symbol);
+                    }
+                    break;
+                case '}':
+                    if (!stack.isEmpty() && stack.get(0) == '{') {
+                        stack.remove(0);
+                    } else {
+                        stack.add(0, symbol);
+                    }
+            }
+        }
+        System.out.println((stack.size() == 0) ? "true" : "false");
     }
 }
