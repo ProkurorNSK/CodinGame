@@ -1,4 +1,4 @@
-package BotProgramming.Code4Life;
+package Contests.Code4Life;
 
 import java.util.*;
 
