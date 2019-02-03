@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PrimeFactorsEffective {
-    public static List<Integer> primeFactors(int numbers) {
-        int n = numbers;
-        List<Integer> factors = new ArrayList<>();
-        for (int i = 2; i <= n / i; i++) {
+    public static List<Long> primeFactors(long numbers) {
+        long n = numbers;
+        List<Long> factors = new ArrayList<>();
+        for (long i = 2; i <= n / i; i++) {
             while (n % i == 0) {
                 factors.add(i);
                 n /= i;
@@ -26,5 +26,8 @@ public class PrimeFactorsEffective {
         primeFactors(3).forEach(System.out::println);
         System.out.println("Primefactors of 32");
         primeFactors(32).forEach(System.out::println);
+        System.out.println("Primefactors of 4999999");
+        primeFactors(4999999).forEach(System.out::println);
     }
+
 }
